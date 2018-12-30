@@ -9,9 +9,8 @@ RUN apt-get update \
   && add-apt-repository -y ppa:brightbox/ruby-ng \
   && apt-get update \
   && echo DEBIAN_FRONTEND is needed: https://askubuntu.com/questions/876240/how-to-automate-setting-up-of-keyboard-configuration-package \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -y xfce4 xfce4-goodies xdotool ruby2.5 ruby2.5-dev build-essential wget
-
-RUN ( \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y xfce4 xfce4-goodies xdotool ruby2.5 ruby2.5-dev build-essential wget \
+  && ( \
     cd $(mktemp -d) \
     && wget -O tigervnc.deb https://bintray.com/tigervnc/stable/download_file?file_path=ubuntu-16.04LTS%2Famd64%2Ftigervncserver_1.7.0-1ubuntu1_amd64.deb \
     && (dpkg -i tigervnc.deb || echo ignore error) \
@@ -24,7 +23,9 @@ RUN ( \
     && apt --fix-broken install -y \
   ) \
   && gem install bundler \
-  && rm -rf /tmp/*
+  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /tmp/* \
+  && rm -rf /var/tmp/*
 
 RUN ( \
     echo close xfce4 first prompt \
